@@ -78,9 +78,6 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         #create arc active decision variable
         x_i_j = m.addVars(arcs, vtype = GRB.BINARY, name = 'x_i_j')
         
-        #create indicator variable if request does not meet time window MOD4b
-        #b_i = m.addVars(Q.shape[0], vtype = GRB.BINARY, name = 'b_i')
-        #ub = end, 
         
         m.update()
         
@@ -99,30 +96,16 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
               for i in range(0, len(Q)))
         # + b_i[i] 
         
-        # Relate time and service time to flow (5)
-        #m.addConstrs(t_i[j] >= ( (t_i[i] + Q['s_i'][i] + buffer) - (1 - x_i_j[i+1, j+1])*M ) 
-        #m.addConstrs(t_i[i] + Q['s_i'][i] + buffer - t_i[j] <= (1 - x_i_j[i+1, j+1])*M
-        
-        # m.addConstrs(t_i[j] >= t_i[i] + Q['s_i'][i] + buffer - (1 - x_i_j[i+1, j+1])*M
-        #               for i in range(0, len(Q)) 
-        #               for j in range(0, len(Q)) if j != i)
-        
+        # Relate time and service time to flow (5)        
         m.addConstrs( (t_i[j]/scale) >= ((t_i[i] + Q['s_i'][i] + buffer - ((1 - x_i_j[i+1, j+1])*M_df.iloc[i, j]))/scale) #go back to *M if going with the generic original M and not M_ij
                       for i in range(0, len(Q)) 
                       for j in range(0, len(Q)) if j != i)
         
-        
-        #time window constraints (6) REMOVED for MOD4b
-        #m.addConstrs(t_i[i] >= Q['a_i'][i] for i in t_i)
-        #m.addConstrs(t_i[i] <= Q['b_i'][i] for i in t_i)
-        
+               
         # scenario time window (7)
         m.addConstrs( ((t_i[i] + Q['s_i'][i] + buffer)/scale) <= (end/scale) for i in t_i )
         m.addConstrs( (t_i[i]/scale) >= 0 for i in t_i)
         
-        #Earliness/Tardiness Constraints for MOD4b (24, 25)
-        #m.addConstrs(K[0]*b_i[i] >= Q['a_i'][i] - t_i[i] - flex for i in b_i)
-        #m.addConstrs(K[0]*b_i[i] >= t_i[i] - Q['b_i'][i] - flex for i in b_i)
         
         #Replace Earliness/Tardiness Constraints from MOD4b + (also remove b_i)
         for i in t_i:
@@ -132,22 +115,10 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
             m.addConstr( (t_i[i]/scale) >= (Q['a_i'][i] - flex - ((1-x_i_j.sum(i+1, '*'))*(Q['a_i'][i] - flex - t_0i)) )/scale)
             m.addConstr( (t_i[i]/scale) <= (Q['b_i'][i] + flex + ((1-x_i_j.sum(i+1, '*'))*(t_0i - Q['b_i'][i] - flex)) )/scale)
         
-        #new constraint to prevent schedule trucks from being scheduled after 720 minutes
-        #if the vehicle is cancelled then this constraint is met and not applicable
-        #m.addConstrs((1-b_i[i])*t_i[i] <= end for i in b_i)
-        #possible linear version of the above nonlinear formulation
-        #m.addConstrs(t_i[i] <= (1-b_i[i])*end for i in b_i)
-        
-        #new constraint to assign unscheduled vehicle start time based on original
-        #time window
-        #m.addConstrs(t_i[i] <= Q['b_i'][i] + b_i[i]*(((Q['a_i'][i] + Q['b_i'][i]) / 2) - Q['b_i'][i]) for i in b_i)
-        #m.addConstrs(t_i[i] >= Q['a_i'][i] - b_i[i]*(Q['a_i'][i] - ((Q['a_i'][i] + Q['b_i'][i]) / 2)) for i in b_i)
         
         #-----------------------------------------------------------------------------
         #Objective Function
-        
-        # expr = gp.quicksum(b_i)
-        # m.setObjective(expr, GRB.MINIMIZE)
+
         
         obj = gp.LinExpr()
         for i in range(0, len(Q)):
@@ -210,10 +181,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
             for item in x_i_j:
                 x_i_j[item].start = x_initialize[i]
                 i += 1
-        
-        #for i in range(0, len(cancelled)):
-            #print(cancelled[i])
-            #b_i[i].start = cancelled[i]
+
         
         m.update()
         
@@ -223,11 +191,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         print('\n')
         m.printQuality()
         
-        
-        # for i in t_i:
-        #     print(t_i[i])
-        #     print((1-x_i_j.sum(i+1, '*')).getValue())
-        # print('\n')
+
         
         #if the PAP is infeasible, possibly due to an inability to find a solution
         #in the required processing time, return empty outputs so that the algoritm

@@ -14,9 +14,6 @@ def gen_Pitt_arrivals(n_index, end):
     import pickle
     from datetime import datetime
 
-    #n_index = 5
-    #end = 1200 #from 4am through Midnight
-
     
     with open('Pitt_truck_data_final.pkl', 'rb') as file:
             raw_df, \

@@ -41,7 +41,7 @@ iterations = 100 #added
 max_parking_spaces = 7 #also known as c #added
 max_hr_demand_per_space = 6
 max_DVs = max_parking_spaces * max_hr_demand_per_space * 20 #needs to bee changed to 20 when using the Pitt dataset
- #also known as n, need to size to the largest possible number of trucks scenario, #added (to get back to original, change 40 to max_parking_spaces)
+#also known as n, need to size to the largest possible number of trucks scenario, #added (to get back to original, change 40 to max_parking_spaces)
 
 #set up set of flexibility scenarios
 #phi = [0, 1, 2, 5, 10, 15, 30]

@@ -14,22 +14,6 @@ import math as math
 
 
 
-# num_spaces = 1
-# a_i = [5, 10, 25]
-# s_i = [25, 5, 5]
-
-# #create a dictionary from lists of data that will be turned into a dataframe
-# requests = {'a_i': a_i, 'b_i': a_i, 's_i': s_i, 't_i': a_i}
-
-# #create index label for Q
-# Trucks = ['Truck_' + str(i+1) 
-#       for i in range(0, len(requests['a_i']))]
-
-# Q = pd.DataFrame(requests, index = Trucks)
-
-# Q['d_i'] = Q['a_i'] + Q['s_i']
-
-
 def seq_curb(num_spaces, Q, end):
 
     try:

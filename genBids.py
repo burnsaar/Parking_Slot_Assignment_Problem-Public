@@ -7,9 +7,7 @@ Created on Wed Oct 27 20:03:08 2021
 
 def genBids(num_trucks, end, Q, flex):
   
-    #num_trucks = 3
-    #end = 7
-      
+     
     import numpy as np
     import pandas as pd
     
@@ -20,13 +18,6 @@ def genBids(num_trucks, end, Q, flex):
     Q['t_i'] = Q['t_i'].astype(int)
     Q['d_i'] = Q['d_i'].astype(int)
     
-    # Q['a_i'] = Q.loc[:, 'a_i'].astype(int)
-    # Q.loc[:, 'b_i'].astype(int)
-    # Q.loc[:, 's_i'].astype(int)
-    # Q.loc[:, 't_i'].astype(int)
-    # Q.loc[:, 'd_i'].astype(int)
-    
-    # Q.at[:, 'a_i'].astype(int, copy = False)
     
     
     bids = pd.DataFrame()

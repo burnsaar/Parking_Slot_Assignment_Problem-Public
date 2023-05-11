@@ -108,28 +108,17 @@ def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
             x_i_j[item].start = x_initialize[i]
             i += 1
     
-    #for i in range(0, len(cancelled)):
-        #print(cancelled[i])
-        #b_i[i].start = cancelled[i]
-        
     m.update()            
     
     
     #-----------------------------------------------------------------------------
     #Objective Function
     
-    # expr = gp.quicksum(b_i)
-    # m.setObjective(expr, GRB.MINIMIZE)
-    
-    
-    
     obj = gp.LinExpr()
     for i in range(1, num_trucks +1):
         for j in range(0, end +1):
-            #obj += Q['s_i'][i-1]*x_i_j[i,j]
             obj += bids.iloc[j][i -1]*x_i_j[i,j]
-    #     obj += b_i[i]*Q['s_i'][i]
-    #     #obj = b_i*weight + e_i*weights?
+
     
     m.setObjective(obj, GRB.MAXIMIZE)
     
@@ -147,11 +136,7 @@ def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
     # Compute optimal solution
     m.optimize()
     print('\n')
-    
-    # print('Total Service Time: ')
-    # print(sum(Q['s_i']))
-    # print('\n')
-    
+   
     
     
     if m.status == GRB.OPTIMAL:
@@ -189,7 +174,7 @@ def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
     for i in range(0, len(Q)):
         park_data = []
         park_data.append(Q['Trucks'][i])
-        #test to see if the truck is double parking
+        #check to see if the truck is double parking
         if np.round(x_i_j.sum(i+1, '*').getValue()) == 0:
             park_data.append(Q['a_i'][i])
             park_data.append(Q['s_i'][i])
@@ -198,7 +183,6 @@ def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
         else:
             for j in range(0, end):
                 #search over time step j for the assignment (==1)
-                #if int(x_i_j[i+1, j].getAttr("x")) == 1:
                 if np.round(x_i_j[i+1, j].getAttr("x")) == 1:
                     park_data.append(j)
                     park_data.append(Q['s_i'][i])

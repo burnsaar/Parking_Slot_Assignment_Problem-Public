@@ -53,12 +53,6 @@ def piece(x, A_rate, D_rate, D_rate_dbl_park, df, Max_Q, len_scenario):
         
         return func, queue_duration, t_queue_remove
     
-    # if df.empty == True:
-    #     func = lambda x: x*A_rate
-    #     queue_duration = 0
-    #     t_queue_remove = 0
-        
-    #     return func, queue_duration, t_queue_remove
     
     
     funclist = []
@@ -472,13 +466,6 @@ Max_Q = 30
 
 x = 0.00
 
-# df = pd.DataFrame({'Start':[5, 30], 'End':[25, 35], 'Total':[20, 5]})
-# # #df = pd.DataFrame({'Start':[5, 20, 45], 'End':[15, 25, 50], 'Total':[10, 5, 5]})
-# df = pd.DataFrame({'Start':[5], 'End':[10], 'Total':[5]})
-# df = pd.DataFrame({'Start':[5, 30], 'End':[10, 35], 'Total':[5, 5]})
-
-# [func, queue_duration, t_queue_remove] = piece(x, A_rate, D_rate, D_rate_dbl_park, df, Max_Q)
-
 
 
 #FCFS
@@ -669,25 +656,7 @@ for c in [1,2,4,7]: #added
 
 
 
-                
-#the average metrics are not necessary any more becuase we are not doing 20 iterations on single number of delivery vehicles
-# AVG_net_dbl_park_minutes_Diff_df_inst_phi5 = net_dbl_park_minutes_Diff_df_inst_phi5.applymap(lambda x: np.mean(x))            
 
-# AVG_total_veh_delay_Diff_inst_phi5 = total_veh_delay_Diff_inst_phi5.applymap(lambda x: np.mean(x))     
-
-# AVG_total_veh_delay_error_Diff_inst_phi5 = total_veh_delay_error_Diff_inst_phi5.applymap(lambda x: np.mean(x))     
-
-# AVG_queue_duration_Diff_inst_phi5 = queue_duration_Diff_inst_phi5.applymap(lambda x: np.mean(x))     
-
-# AVG_t_queue_remove_Diff_inst_phi5 = t_queue_remove_Diff_inst_phi5.applymap(lambda x: np.mean(x)) 
-
-# AVG_avg_veh_in_queue_Diff_inst_phi5 = avg_veh_in_queue_Diff_inst_phi5.applymap(lambda x: np.mean(x))   
-
-# AVG_max_veh_in_queue_Diff_inst_phi5 = max_veh_in_queue_Diff_inst_phi5.applymap(lambda x: np.mean(x))
-
-# AVG_avg_veh_delay_Diff_inst_phi5 = avg_veh_delay_Diff_inst_phi5.applymap(lambda x: np.mean(x))  
-
-# AVG_avg_len_queue_Diff_inst_phi5 = avg_len_queue_Diff_inst_phi5.applymap(lambda x: np.mean(x))   
 
 
 

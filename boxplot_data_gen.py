@@ -171,8 +171,8 @@ dbl_park_FCFS_instance_df_7_8 = pd.DataFrame()
 
 
 #c_index = 1
-#for c_index in range(1, max_parking_spaces +1):
-for c_index in range(7,8):
+for c_index in range(1, max_parking_spaces +1):
+#for c_index in range(7,8):
     
     dbl_park_FCFS_instance = []
     
