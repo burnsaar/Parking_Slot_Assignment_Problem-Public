@@ -6,7 +6,7 @@ Created on Sat Sep 10 13:40:21 2022
 """
 
 
-def gen_Pitt_arrivals(n_index, end):
+def gen_Pitt_arrivals(n_index, end, buffer):
     
     import numpy as np
     import pandas as pd
@@ -48,7 +48,7 @@ def gen_Pitt_arrivals(n_index, end):
             
             draw_si = int(truck_data_final['duration'].iloc[item] / 60) #convert to minutes and to an integer value
             
-            if arrival_time + draw_si > end:
+            if arrival_time + draw_si + buffer > end:
                 item = random.randint(0, len(truck_data_final)) #not a good draw, arrival + service time exceed the end of the scenario, e.g. midnight, redraw a row index
             else:
                 flag = False #good sample, change the flag so that we can exit the while loop and store the current truck data

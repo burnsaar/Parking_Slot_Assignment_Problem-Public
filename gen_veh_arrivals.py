@@ -5,7 +5,7 @@ Created on Wed Sep 22 09:29:14 2021
 @author: Burns
 """
 
-def gen_veh_arrivals(max_trucks, end):
+def gen_veh_arrivals(max_trucks, end, buffer):
     
     import numpy as np
     import pandas as pd
@@ -89,7 +89,7 @@ def gen_veh_arrivals(max_trucks, end):
             
            #check to see if the current start_window + serv_dur exceeds the end
            #of the scenario time, and redraw if this is the case
-            if start_window + serv_dur <= end:
+            if start_window + serv_dur + buffer <= end:
                 flag = False #the current random draw is acceptable, change the 
                 #flag, exit the while loop and proceed to the next randow draw
             else:

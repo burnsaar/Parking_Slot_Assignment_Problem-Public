@@ -5,7 +5,7 @@ Created on Sun Mar  7 09:12:21 2021
 @author: Burns
 """
 
-def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, x_initialize):
+def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, x_initialize, timelimit = 45):
     
     try:
         #added variables to help scale the constraints in the optimization algorithm
@@ -17,6 +17,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         from gurobipy import GRB
         import numpy as np
         import pandas as pd
+        from datetime import datetime, date
         
         # Base data
         
@@ -27,6 +28,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         #of M.  We make the value of M and the bounds of the big M constraint larger
         #in this case, but this may still be more efficient by allowing t_0i = 0.
 
+        t0 = datetime.now()
         
         #MOD4 Determine K
         K = []
@@ -55,6 +57,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         for i in range(0, len(Q)):
             for j in range(0, len(Q)):
                  M_ij = min(end, Q['b_i'][i] + flex + Q['s_i'][i] + buffer) - max(start, Q['a_i'][j] - flex)
+                 #M_ij = 2000
                  M_inst.append(M_ij)
                 
             M_df[i] = M_inst
@@ -134,7 +137,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         #-----------------------------------------------------------------------------
         #Set Model Parameters
         
-        m.setParam('TimeLimit', 45)
+        m.setParam('TimeLimit', timelimit)
         #print(m.getParamInfo('TimeLimit'))
         
         # # Symmetry Detection https://www.gurobi.com/documentation/9.1/refman/symmetry.html#parameter:Symmetry
@@ -188,6 +191,8 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         #-----------------------------------------------------------------------------
         # Compute optimal solution
         m.optimize()
+        t1 = datetime.now()
+        runtime = t1-t0
         print('\n')
         m.printQuality()
         
@@ -200,7 +205,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         #PAPvAP data to make sure the PAP is still being processed
         if m.status == 9:
             
-            return m.status, None, None, None, None, None, None
+            return runtime, m.status, None, None, None, None, None, None
 
         #----------------------------------------------------------------------
         #create output statistics
@@ -287,7 +292,7 @@ def MOD_flex(flex, num_trucks, num_spaces, Q, buffer, start, end, t_initialize, 
         for i in x_i_j:
             end_state_x_ij.append(int(x_i_j[i].getAttr("x")))
                     
-        return m.status, m.getObjective().getValue()*scale_s_i, count_b_i, end_state_t_i, end_state_x_ij, dbl_park_events, park_events
+        return runtime, m.status, m.getObjective().getValue()*scale_s_i, count_b_i, end_state_t_i, end_state_x_ij, dbl_park_events, park_events
     
 
         

@@ -10,10 +10,11 @@ import gurobipy as gp
 from gurobipy import GRB
 import numpy as np
 import pandas as pd
+from datetime import datetime, date
 
 
-def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
-    
+def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize, timelimit = 120):
+    t0 = datetime.now()
     x = [(i, j) 
             for i in range(1, num_trucks +1) #based on the number of trucks
             for j in range(0, end +1)] #based on the number of minutes in the scenario
@@ -125,7 +126,7 @@ def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
     #-----------------------------------------------------------------------------
     #Set Model Parameters
     
-    m.setParam('TimeLimit', 120)
+    m.setParam('TimeLimit', timelimit)
     
     # # MIP Focus https://www.gurobi.com/documentation/9.1/refman/mipfocus.html#parameter:MIPFocus
     # # 1 = find feasible solns quickly, 2 = focus on proving the optimal soln, 3 = focus on the bound if obj bound moving slowly
@@ -134,7 +135,10 @@ def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
     m.setParam('MIPGap', .01)
     
     # Compute optimal solution
+    
     m.optimize()
+    t1 = datetime.now()
+    runtime = t1-t0
     print('\n')
    
     
@@ -204,5 +208,5 @@ def AP(num_trucks, end, Q, num_spaces, bids, flex, buffer, x_initialize):
     print('Total dbl_parking: ' + str(dbl_park_Opt))
     
     
-    return m.status, m.getObjective().getValue(), dbl_park_Opt, park_demand, end_state_x_i_j, dbl_park_events, park_events
+    return runtime, m.status, m.getObjective().getValue(), dbl_park_Opt, park_demand, end_state_x_i_j, dbl_park_events, park_events
     
