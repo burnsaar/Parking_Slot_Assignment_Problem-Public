@@ -12,7 +12,7 @@ import time
 
 tic = time.time()
 
-with open('pub_Pitt_run_for_record_27_Nov_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Aspen_run_for_record_17_Jan_2024_buffer_15.pkl', 'rb') as file:
     n_index_lst_df, \
     n_index_norm_lst_df, \
     arrival_dfs_df, \
@@ -57,8 +57,9 @@ park_events_df_inst_phi5_shifted = pd.DataFrame(index = range(iterations), colum
 
 
 #shift for FCFS
-for c in range(1, max_parking_spaces +1):
+#for c in range(1, max_parking_spaces +1):
 #for c in range(1,4):
+for c in [1,2,4,7]:
     #for i in range(78,79):
     for i in range(0, iterations):
         print('FCFS: c = ', c, ' i = ', i)
@@ -70,7 +71,8 @@ for c in range(1, max_parking_spaces +1):
         #on the number of parking spaces
         #n_index = int(DV_scenarios.iloc[n][c-1])
         
-        OG_sched = park_events_df_inst_FCFS_df.iloc[i, c-1]
+        #OG_sched = park_events_df_inst_FCFS_df.iloc[i, c-1]
+        OG_sched = park_events_df_inst_FCFS_df.loc[i][c] #changed to this during the revised R&R graphic gen
         #print(OG_sched)
         
         shift_sched = pd.DataFrame(columns = ['Truck', 't_i', 's_i', 'd_i', 'a_i_OG', 'd_i_OG', 'Park Type'])
@@ -79,7 +81,7 @@ for c in range(1, max_parking_spaces +1):
         for event in range(0, len(OG_sched)):
             data = []
             data.append(OG_sched['Truck'][event])
-            shift_arrival = OG_sched['a_i'][event] + np.random.normal(0,2)
+            shift_arrival = OG_sched['a_i'][event] + np.random.normal(0, 7) #changed from std = 2 to represent 15 minutes uncertainty in arrival
             if shift_arrival < 0:
                 shift_arrival = 0
             #print(shift_arrival)
@@ -102,8 +104,9 @@ for c in range(1, max_parking_spaces +1):
         
 
 # #shift for phi5     
-for c in range(1, max_parking_spaces +1):
+#for c in range(1, max_parking_spaces +1):
 #for c in range(1,4):
+for c in [1,2,4,7]:
     #for i in range(78,79):
     for i in range(0, iterations):
         print('Phi5: c = ', c, ' i = ', i)
@@ -113,7 +116,8 @@ for c in range(1, max_parking_spaces +1):
         #on the number of parking spaces
         #n_index = int(DV_scenarios.iloc[n][c-1])
         
-        OG_sched = park_events_df_inst_phi5_df.iloc[i, c-1]
+        #OG_sched = park_events_df_inst_phi5_df.iloc[i, c-1]
+        OG_sched = park_events_df_inst_phi5_df.loc[i][c]
         #print(OG_sched)
         
         shift_sched = pd.DataFrame(columns = ['Truck', 't_i', 's_i', 'd_i', 'a_i_OG', 'd_i_OG', 'Park Type'])
@@ -122,7 +126,7 @@ for c in range(1, max_parking_spaces +1):
         for event in range(0, len(OG_sched)):
             data = []
             data.append(OG_sched['Truck'][event])
-            shift_arrival = OG_sched['a_i'][event] + np.random.normal(0,2)
+            shift_arrival = OG_sched['a_i'][event] + np.random.normal(0, 7)
             if shift_arrival < 0:
                 shift_arrival = 0
             #print(shift_arrival)
@@ -155,7 +159,7 @@ print('runtime: ' + str(runtime))
 
 # #save data from the run
 # import pickle
-# with open('pub_Pitt_shifted_27_Nov_2022_buffer_5.pkl', 'wb') as file:
+# with open('pub_Aspen_shifted_17_Jan_2024_buffer_15.pkl', 'wb') as file:
 #     pickle.dump(
 #         [n_index_lst_df, 
 #           n_index_norm_lst_df, 

@@ -89,7 +89,7 @@ with open('pub_Pitt_run_for_record_9_Nov_2022.pkl', 'rb') as file:
         
 #****phi5 only, used for the buffer scenarios**********************************
 #new, random uniform number of DVs, 100 iteration, run for record, buffer 5
-with open('pub_Pitt_run_for_record_7_Oct_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Pitt_run_for_record_18_Jan_2024_buffer_15.pkl', 'rb') as file:
     n_index_lst_df, \
     n_index_norm_lst_df, \
     arrival_dfs_df, \
@@ -241,8 +241,10 @@ for c in range(1, 8):
 
 
 #****phi5 only, used for the buffer scenarios**********************************
-for c in range(1, 8):
-    for i in range(0, 100):
+#for c in range(1, 8):
+for c in [1,2,4,7]:
+    #for i in range(0, 100):
+    for i in range(0, 50):
         #first, focus in on only the optimizations conducted by the PAP
         if PAPvAP_inst_phi5_df.iloc[i][c] == 'PAP':
             #pull the correct Q set of vehicle requests and grab the scaling factor
@@ -336,7 +338,7 @@ for c in range(1, 8):
 #****phi5 only, used for the buffer scenarios**********************************
 #save data from the run
 # import pickle
-# with open('pub_Pitt_run_for_record_12_Nov_2022_buffer_5_reversed_scaling.pkl', 'wb') as file:
+# with open('pub_Pitt_run_for_record_18_Nov_2024_buffer_15_reversed_scaling.pkl', 'wb') as file:
 #     pickle.dump([n_index_lst_df,
 #                   n_index_norm_lst_df,
 #                   arrival_dfs_df,

@@ -10,7 +10,7 @@ import pickle
 
 
 #load data from shift_sched_update, random shifted optimal data
-with open('pub_Pitt_reassessed_phi5_27_Nov_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Aspen_reassessed_phi5_18_Jan_2024_buffer_15.pkl', 'rb') as file:
      n_index_lst_df, \
      n_index_norm_lst_df, \
      arrival_dfs_df, \
@@ -40,7 +40,7 @@ with open('pub_Pitt_reassessed_phi5_27_Nov_2022_buffer_5.pkl', 'rb') as file:
          
          
 #load data from the random shift and reassess FCFS data, from script: prep_FCFS_post_random_shift.py
-with open('pub_Pitt_reassessed_FCFS_2_Dec_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Aspen_reassessed_FCFS_18_Jan_2024_buffer_15.pkl', 'rb') as file:
      n_index_lst_df, \
      n_index_norm_lst_df, \
      arrival_dfs_df, \
@@ -62,7 +62,7 @@ with open('pub_Pitt_reassessed_FCFS_2_Dec_2022_buffer_5.pkl', 'rb') as file:
          
          
 #combine the two dataset and save, creates the input requires for the lane obstruction script         
-with open('pub_Pitt_reassessed_combined_2_Dec_2022_buffer_5.pkl', 'wb') as file: 
+with open('pub_Aspen_reassessed_combined_18_Jan_2024_buffer_15.pkl', 'wb') as file: 
     pickle.dump(
         [n_index_lst_df, 
           n_index_norm_lst_df, 

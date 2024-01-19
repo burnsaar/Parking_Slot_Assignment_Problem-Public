@@ -31,16 +31,16 @@ np.random.seed(335)
 
 tic = time.time()
 
-dataset = 'Aspen'
+dataset = 'Pitt'
 
 start = 0
-end = 660  #also know as T, for the Aspen data this needs to be 11hrs or 660 minutes, 7am-6pm
+end = 1200  #also know as T, for the Aspen data this needs to be 11hrs or 660 minutes, 7am-6pm
             #for the Pitt data this should be set at 1200, represents 4am - Midnight
 
 iterations = 50 #added
 max_parking_spaces = 7 #also known as c #added
 max_hr_demand_per_space = 6
-max_DVs = max_parking_spaces * max_hr_demand_per_space * 11 #needs to bee changed to 20 when using the Pitt dataset, 11 for Aspen
+max_DVs = max_parking_spaces * max_hr_demand_per_space * 20 #needs to bee changed to 20 when using the Pitt dataset, 11 for Aspen
 #also known as n, need to size to the largest possible number of trucks scenario, #added (to get back to original, change 40 to max_parking_spaces)
 
 #set up set of flexibility scenarios
@@ -48,7 +48,7 @@ max_DVs = max_parking_spaces * max_hr_demand_per_space * 11 #needs to bee change
 phi = [5] #added
 #phi = [30]
 #schedule buffer between reservations
-buffer = 5 #added
+buffer = 15 #added
 
 
 #dataframe initialization
@@ -154,12 +154,12 @@ for c_index in range(1, max_parking_spaces +1):
         
         #what is the lower and upper bound of the number of DVs, which is dependent on the number of parking spaces
         lower_DVs = 1 #this is the lowest possible number of DVs to experience over the day, could go higher, but engineering judgement
-        upper_DVs = max_hr_demand_per_space*11*c_index #we want 6 veh/hr*11hr scenario window*the number of parking spaces #added
+        upper_DVs = max_hr_demand_per_space*20*c_index #we want 6 veh/hr*11hr scenario window*the number of parking spaces #added
         
         #draw a random integer between the upper and lower number of DVs to expect
         n_index = np.random.randint(lower_DVs, upper_DVs +1) #+1 becuase it is exclusive of the upper value
         n_index_lst.append(n_index)
-        n_index_norm = n_index / 11 / c_index #variable available for storage
+        n_index_norm = n_index / 20 / c_index #variable available for storage
         n_index_norm_lst.append(n_index_norm)
         
         #generate a random set of vehicle arrival requests based on the number of
@@ -185,8 +185,8 @@ for c_index in range(1, max_parking_spaces +1):
 
 #set the number of parking spaces
 #for c_index in range(1, max_parking_spaces +1):
-#for c_index in [1,2,4,7]: #used for the R&R cases
-for c_index in range(2,3):
+for c_index in [1,2,4,7]: #used for the R&R cases
+#for c_index in range(2,3):
     
     #FCFS statistics
     dbl_park_FCFS_instance = []
@@ -256,8 +256,8 @@ for c_index in range(2,3):
 
     
     #set the vehicle arrival matrix
-    for i_index in range(22,23):
-    #for i_index in range(1, iterations +1):
+    #for i_index in range(22,23):
+    for i_index in range(1, iterations +1):
         #if (i_index == 4) and (c_index == 2):
             #print('stop')
         
@@ -511,70 +511,70 @@ print('runtime: ' + str(runtime))
 
 
 #save data from the run
-# import pickle
-# with open('pub_Aspen_run_for_record_17_Jan_2024_buffer_15.pkl', 'wb') as file:
-#     pickle.dump([n_index_lst_df,
-#                   n_index_norm_lst_df,
-#                   arrival_dfs_df,
-#                   sum_service_df,
-#                   dbl_park_FCFS_instance_df,
-#                   dbl_park_FCFS_cancelled_inst_df,
-#                   dbl_park_events_df_inst_FCFS_df,
-#                   legal_park_events_df_inst_FCFS_df,
-#                   park_events_df_inst_FCFS_df,
-#                   #dbl_park_Opt_status_inst_phi0_df,
-#                   #dbl_park_Opt_status_inst_phi1_df,
-#                   #dbl_park_Opt_status_inst_phi2_df,
-#                   dbl_park_Opt_status_inst_phi5_df,
-#                   #dbl_park_Opt_status_inst_phi10_df,
-#                   #dbl_park_Opt_status_inst_phi15_df,
-#                   #dbl_park_Opt_status_inst_phi30_df,
-#                   #PAPvAP_inst_phi0_df,
-#                   #PAPvAP_inst_phi1_df,
-#                   #PAPvAP_inst_phi2_df,
-#                   PAPvAP_inst_phi5_df,
-#                   #PAPvAP_inst_phi10_df,
-#                   #PAPvAP_inst_phi15_df,
-#                   #PAPvAP_inst_phi30_df,
-#                   #dbl_park_Opt_inst_phi0_df,
-#                   #dbl_park_Opt_inst_phi1_df,
-#                   #dbl_park_Opt_inst_phi2_df,
-#                   dbl_park_Opt_inst_phi5_df,
-#                   #dbl_park_Opt_inst_phi10_df,
-#                   #dbl_park_Opt_inst_phi15_df,
-#                   #dbl_park_Opt_inst_phi30_df,
-#                   #dbl_park_Diff_inst_phi0_df,
-#                   #dbl_park_Diff_inst_phi1_df,
-#                   #dbl_park_Diff_inst_phi2_df,
-#                   dbl_park_Diff_inst_phi5_df,
-#                   #dbl_park_Diff_inst_phi10_df,
-#                   #dbl_park_Diff_inst_phi15_df,
-#                   #dbl_park_Diff_inst_phi30_df,
-#                   #park_demand_Opt_inst_phi0_df,
-#                   #park_demand_Opt_inst_phi1_df,
-#                   #park_demand_Opt_inst_phi2_df,
-#                   park_demand_Opt_inst_phi5_df,
-#                   #park_demand_Opt_inst_phi10_df,
-#                   #park_demand_Opt_inst_phi15_df,
-#                   #park_demand_Opt_inst_phi30_df,
-#                   #dbl_park_events_df_inst_phi0_df,
-#                   #dbl_park_events_df_inst_phi1_df,
-#                   #dbl_park_events_df_inst_phi2_df,
-#                   dbl_park_events_df_inst_phi5_df,
-#                   #dbl_park_events_df_inst_phi10_df,
-#                   #dbl_park_events_df_inst_phi15_df,
-#                   #dbl_park_events_df_inst_phi30_df,
-#                   #park_events_df_inst_phi0_df,
-#                   #park_events_df_inst_phi1_df,
-#                   #park_events_df_inst_phi2_df,
-#                   park_events_df_inst_phi5_df,
-#                   #park_events_df_inst_phi10_df,
-#                   #park_events_df_inst_phi15_df,
-#                   #park_events_df_inst_phi30_df,
-#                   runtime,
-#                   buffer,
-#                   end,
-#                   iterations,
-#                   max_parking_spaces,
-#                   phi],
-#                 file)
+import pickle
+with open('pub_Pitt_run_for_record_18_Jan_2024_buffer_15.pkl', 'wb') as file:
+    pickle.dump([n_index_lst_df,
+                  n_index_norm_lst_df,
+                  arrival_dfs_df,
+                  sum_service_df,
+                  dbl_park_FCFS_instance_df,
+                  dbl_park_FCFS_cancelled_inst_df,
+                  dbl_park_events_df_inst_FCFS_df,
+                  legal_park_events_df_inst_FCFS_df,
+                  park_events_df_inst_FCFS_df,
+                  #dbl_park_Opt_status_inst_phi0_df,
+                  #dbl_park_Opt_status_inst_phi1_df,
+                  #dbl_park_Opt_status_inst_phi2_df,
+                  dbl_park_Opt_status_inst_phi5_df,
+                  #dbl_park_Opt_status_inst_phi10_df,
+                  #dbl_park_Opt_status_inst_phi15_df,
+                  #dbl_park_Opt_status_inst_phi30_df,
+                  #PAPvAP_inst_phi0_df,
+                  #PAPvAP_inst_phi1_df,
+                  #PAPvAP_inst_phi2_df,
+                  PAPvAP_inst_phi5_df,
+                  #PAPvAP_inst_phi10_df,
+                  #PAPvAP_inst_phi15_df,
+                  #PAPvAP_inst_phi30_df,
+                  #dbl_park_Opt_inst_phi0_df,
+                  #dbl_park_Opt_inst_phi1_df,
+                  #dbl_park_Opt_inst_phi2_df,
+                  dbl_park_Opt_inst_phi5_df,
+                  #dbl_park_Opt_inst_phi10_df,
+                  #dbl_park_Opt_inst_phi15_df,
+                  #dbl_park_Opt_inst_phi30_df,
+                  #dbl_park_Diff_inst_phi0_df,
+                  #dbl_park_Diff_inst_phi1_df,
+                  #dbl_park_Diff_inst_phi2_df,
+                  dbl_park_Diff_inst_phi5_df,
+                  #dbl_park_Diff_inst_phi10_df,
+                  #dbl_park_Diff_inst_phi15_df,
+                  #dbl_park_Diff_inst_phi30_df,
+                  #park_demand_Opt_inst_phi0_df,
+                  #park_demand_Opt_inst_phi1_df,
+                  #park_demand_Opt_inst_phi2_df,
+                  park_demand_Opt_inst_phi5_df,
+                  #park_demand_Opt_inst_phi10_df,
+                  #park_demand_Opt_inst_phi15_df,
+                  #park_demand_Opt_inst_phi30_df,
+                  #dbl_park_events_df_inst_phi0_df,
+                  #dbl_park_events_df_inst_phi1_df,
+                  #dbl_park_events_df_inst_phi2_df,
+                  dbl_park_events_df_inst_phi5_df,
+                  #dbl_park_events_df_inst_phi10_df,
+                  #dbl_park_events_df_inst_phi15_df,
+                  #dbl_park_events_df_inst_phi30_df,
+                  #park_events_df_inst_phi0_df,
+                  #park_events_df_inst_phi1_df,
+                  #park_events_df_inst_phi2_df,
+                  park_events_df_inst_phi5_df,
+                  #park_events_df_inst_phi10_df,
+                  #park_events_df_inst_phi15_df,
+                  #park_events_df_inst_phi30_df,
+                  runtime,
+                  buffer,
+                  end,
+                  iterations,
+                  max_parking_spaces,
+                  phi],
+                file)

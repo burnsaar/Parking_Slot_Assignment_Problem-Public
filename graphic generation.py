@@ -135,7 +135,7 @@ with open('pub_Aspen_queuing_data_post_process_phi5_med_limit30_7_Nov_2022.pkl',
  
 #***********Aspen w/ buffer 5**************************************************
 #new, random uniform number of DVs, 100 iteration, run for record, buffer 5
-with open('pub_Aspen_run_for_record_12_Nov_2022_buffer_5_reversed_scaling.pkl', 'rb') as file:
+with open('pub_Aspen_run_for_record_17_Jan_2024_buffer_15.pkl', 'rb') as file:
     n_index_lst_df, \
     n_index_norm_lst_df, \
     arrival_dfs_df, \
@@ -163,7 +163,7 @@ with open('pub_Aspen_run_for_record_12_Nov_2022_buffer_5_reversed_scaling.pkl', 
         
 #data to help graph the redux in dbl parking with buffer 5, but after the schedule
 #has been shifted and reassessed 
-with open('pub_Aspen_reassessed_combined_2_Dec_2022_buffer_5_redux_graphic_prep.pkl', 'rb') as file: 
+with open('pub_Aspen_reassessed_combined_18_Jan_2024_buffer_15_redux_graphic_prep.pkl', 'rb') as file: 
           n_index_lst_df, \
           n_index_norm_lst_df, \
           arrival_dfs_df, \
@@ -580,11 +580,11 @@ c_list = [1,2,4,7]
 #c_list = [1]
 for c in c_list:
     #create a series to represent the specific number of parking spaces we are looking at
-    parking_space = pd.Series([c]*100, name = 'Parking Spaces')
+    parking_space = pd.Series([c]*50, name = 'Parking Spaces')
     #pull the normalized parking demand for a specific number of parking spaces
     parking_space_demand = pd.Series(n_index_norm_lst_df[c], name = 'norm parking demand')
     #pull the associated reduction in double parking
-    redux = pd.Series(dbl_park_Diff_inst_phi30_df[c]/20/c, name = 'redux') #11 for Aspen, 20 for Pitt
+    redux = pd.Series(dbl_park_Diff_inst_phi5_df[c]/11/c, name = 'redux') #11 for Aspen, 20 for Pitt
     #combine this two in column form
     df = pd.concat([parking_space, parking_space_demand, redux], axis = 1)
     #sort the data based on the norm parking demand
@@ -607,7 +607,7 @@ plt.axhline(y = 0, xmin = 0, xmax = 6, linewidth=2, color='k', linestyle = '--')
 #plt.title('(Aspen, 11-sample rolling average)')
 plt.xlabel('Number of Deliveries \n (per hour per parking space)')
 plt.ylabel('Reduction in Double Parking \n (minutes per hour per parking space)')
-plt.ylim([-1, 21])
+plt.ylim([-10, 11.5])
 plt.legend(title = 'Parking Spaces', loc = 'upper left', prop={'size': 8})
 
 plt.savefig("output.jpg", bbox_inches = 'tight')

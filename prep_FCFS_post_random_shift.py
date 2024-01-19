@@ -15,7 +15,7 @@ import seq_arrival_new as seq_curb
 
 
 import pickle
-with open('pub_Pitt_shifted_27_Nov_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Aspen_shifted_17_Jan_2024_buffer_15.pkl', 'rb') as file:
     n_index_lst_df, \
     n_index_norm_lst_df, \
     arrival_dfs_df, \
@@ -37,7 +37,8 @@ with open('pub_Pitt_shifted_27_Nov_2022_buffer_5.pkl', 'rb') as file:
 dbl_park_events_df_inst_FCFS_df = pd.DataFrame()
 
 
-for c in range(1, max_parking_spaces +1):
+#for c in range(1, max_parking_spaces +1):
+for c in [1,2,4,7]:
     dbl_park_events_df_inst_FCFS_lst = []
     
     for i in range(0, iterations):
@@ -71,7 +72,7 @@ for c in range(1, max_parking_spaces +1):
 
 # #save data from the run
 # import pickle
-# with open('pub_Pitt_reassessed_FCFS_2_Dec_2022_buffer_5.pkl', 'wb') as file:
+# with open('pub_Aspen_reassessed_FCFS_18_Jan_2024_buffer_15.pkl', 'wb') as file:
 #     pickle.dump(
 #         [n_index_lst_df, 
 #           n_index_norm_lst_df, 

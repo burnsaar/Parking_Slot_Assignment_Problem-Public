@@ -17,7 +17,7 @@ tic = time.time()
 
 
 #optimal w/ buffer, randomly shifted arrivals, reassassed parking schedule
-with open('pub_Pitt_reassessed_combined_2_Dec_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Aspen_reassessed_combined_18_Jan_2024_buffer_15.pkl', 'rb') as file:
         n_index_lst_df, \
         n_index_norm_lst_df, \
         arrival_dfs_df, \
@@ -50,7 +50,8 @@ with open('pub_Pitt_reassessed_combined_2_Dec_2022_buffer_5.pkl', 'rb') as file:
 dbl_park_Diff_inst_phi5_df = pd.DataFrame()
 
 
-for c_index in range(1, max_parking_spaces +1):
+#for c_index in range(1, max_parking_spaces +1):
+for c_index in [1,2,4,7]:
     
     dbl_park_Diff_instance = []
     
@@ -58,8 +59,11 @@ for c_index in range(1, max_parking_spaces +1):
         print('c = ' + str(c_index) + ' i = ' + str(i_index))
         
         #calc the sum of the dbl parking service duration for FCFS and phiX
-        dbl_parking_FCFS_sum = np.sum(dbl_park_events_df_inst_FCFS_df.iloc[i_index, c_index -1]['s_i'])
-        dbl_parking_phi5_sum = np.sum(dbl_park_events_df_inst_phi5_df.iloc[i_index, c_index -1]['s_i'])
+        #dbl_parking_FCFS_sum = np.sum(dbl_park_events_df_inst_FCFS_df.iloc[i_index, c_index -1]['s_i']) #used prior to R&R graphics
+        #dbl_parking_phi5_sum = np.sum(dbl_park_events_df_inst_phi5_df.iloc[i_index, c_index -1]['s_i'])
+        dbl_parking_FCFS_sum = np.sum(dbl_park_events_df_inst_FCFS_df.loc[i_index][c_index]['s_i'])
+        dbl_parking_phi5_sum = np.sum(dbl_park_events_df_inst_phi5_df.loc[i_index][c_index]['s_i'])
+        
         
         #take the diff or reduction in dbl parking (FCFS - phiX, want this value to be positive reduction)
         Diff = dbl_parking_FCFS_sum - dbl_parking_phi5_sum
@@ -82,7 +86,7 @@ runtime = toc-tic
 print('runtime: ' + str(runtime))
 
 # import pickle
-# with open('pub_Pitt_reassessed_combined_3_Dec_2022_buffer_5_redux_graphic_prep.pkl', 'wb') as file: 
+# with open('pub_Aspen_reassessed_combined_18_Jan_2024_buffer_15_redux_graphic_prep.pkl', 'wb') as file: 
 #     pickle.dump(
 #         [n_index_lst_df, 
 #           n_index_norm_lst_df, 
