@@ -91,7 +91,7 @@ tic = time.time()
 
 # optimal w/ buffer, randomly shifted arrivals, reassassed parking schedule, run
 # the below load instead
-# with open('pub_Aspen_reassessed_combined_1_Dec_2022_buffer_5.pkl', 'rb') as file:
+# with open('pub_Aspen_reassessed_combined_18_Jan_2024_buffer_15.pkl', 'rb') as file:
 #         n_index_lst_df, \
 #         n_index_norm_lst_df, \
 #         arrival_dfs_df, \
@@ -192,7 +192,7 @@ tic = time.time()
 
 # Pitt optimal w/ buffer, randomly shifted arrivals, reassassed parking schedule, run
 # the below load instead
-with open('pub_Pitt_reassessed_combined_2_Dec_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Pitt_reassessed_combined_18_Jan_2024_buffer_15.pkl', 'rb') as file:
         n_index_lst_df, \
         n_index_norm_lst_df, \
         arrival_dfs_df, \
@@ -378,7 +378,8 @@ net_dbl_park_events_df_inst_phi15 = pd.DataFrame(index = range(0, iterations), c
 net_dbl_park_events_df_inst_phi30 = pd.DataFrame(index = range(0, iterations), columns = [1, 2, 3, 4, 5, 6, 7], dtype = object).applymap(lambda x: [])
 #net_dbl_park_events_df_inst_phi30['Trucks'] = truck_scenarios
 
-for c in range(1, max_parking_spaces +1):
+#for c in range(1, max_parking_spaces +1):
+for c in [1,2,4,7]:
 #for c in range(2, 3):
     
     #n = 0
@@ -389,11 +390,13 @@ for c in range(1, max_parking_spaces +1):
         print('c: ' + str(c) + ', i: ' + str(i))
         
         
-        net_dbl_park_events_df_inst_FCFS.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_FCFS_df.iloc[i, c-1])) #needed for buffer
+        #net_dbl_park_events_df_inst_FCFS.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_FCFS_df.iloc[i, c-1])) #needed for buffer
+        net_dbl_park_events_df_inst_FCFS.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_FCFS_df.iloc[i][c])) #for the R2R case
         #net_dbl_park_events_df_inst_phi0.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi0_df.iloc[i, c-1]))
         #net_dbl_park_events_df_inst_phi1.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi1_df.iloc[i, c-1]))
         #net_dbl_park_events_df_inst_phi2.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi2_df.iloc[i, c-1]))
-        net_dbl_park_events_df_inst_phi5.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi5_df.iloc[i, c-1])) #needed for buffer
+        #net_dbl_park_events_df_inst_phi5.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi5_df.iloc[i, c-1])) #needed for buffer
+        net_dbl_park_events_df_inst_phi5.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi5_df.iloc[i][c])) #for the R2R case
         #net_dbl_park_events_df_inst_phi10.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi10_df.iloc[i, c-1]))
         #net_dbl_park_events_df_inst_phi15.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi15_df.iloc[i, c-1]))
         #net_dbl_park_events_df_inst_phi30.iloc[i][c].append(net_dbl_park_events(dbl_park_events_df_inst_phi30_df.iloc[i, c-1]))
@@ -408,7 +411,7 @@ print('runtime: ' + str(runtime))
 
 # save data needed for the queuing model
 # import pickle
-# with open('pub_Pitt_net_dbl_parking_2_Dec_2022_buffer_5.pkl', 'wb') as file:
+# with open('pub_Pitt_net_dbl_parking_14_Feb_2024_buffer_15.pkl', 'wb') as file:
 #     pickle.dump([net_dbl_park_events_df_inst_FCFS, #needed for buffer
 #                   #net_dbl_park_events_df_inst_phi0,
 #                   #net_dbl_park_events_df_inst_phi1,

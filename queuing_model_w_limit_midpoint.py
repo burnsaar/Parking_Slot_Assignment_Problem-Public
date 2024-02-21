@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 tic = time.time()
 
 
-# with open('pub_Aspen_net_dbl_parking_1_Dec_2022_buffer_5.pkl', 'rb') as file:
+# with open('pub_Aspen_net_dbl_parking_14_Feb_2024_buffer_15.pkl', 'rb') as file:
 #     net_dbl_park_events_df_inst_FCFS, \
 #     net_dbl_park_events_df_inst_phi5, \
 #     max_parking_spaces, \
@@ -27,7 +27,7 @@ tic = time.time()
         
 # file.close()
 
-with open('pub_Pitt_net_dbl_parking_2_Dec_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Pitt_net_dbl_parking_14_Feb_2024_buffer_15.pkl', 'rb') as file:
     net_dbl_park_events_df_inst_FCFS, \
     net_dbl_park_events_df_inst_phi5, \
     max_parking_spaces, \
@@ -235,13 +235,13 @@ def piece(x, A_rate, D_rate, D_rate_dbl_park, df, Max_Q, len_scenario):
                             #split the time normal departure rate into two section, one for 
                             #the normal departure rate and once the queue disappates the function
                             #should be the same as the arrival rate
-                            condlist.append((x >= df.iloc[row]['End'] and (x < t_queue_remove)))
+                            condlist.append((x >= df.iloc[row]['End'] and (x < t_queue_remove[0])))
                             funclist.append(depart)
                             # points.iloc[-1]['Start_x'] = df.iloc[row]['End']
                             # points.iloc[-1]['Stop_x'] = t_queue_remove[0]
                             points.loc[len(points.index)] = [df.iloc[row]['End'], t_queue_remove[0]]
                             
-                            condlist.append((x >= t_queue_remove) and (x < df.iloc[row +1]['Start']))
+                            condlist.append((x >= t_queue_remove[0]) and (x < df.iloc[row +1]['Start']))
                             funclist.append(arrivals)
                             # points.iloc[-1]['Start_x'] = t_queue_remove[0]
                             # points.iloc[-1]['Stop_x'] = df.iloc[row +1]['Start']
@@ -326,13 +326,13 @@ def piece(x, A_rate, D_rate, D_rate_dbl_park, df, Max_Q, len_scenario):
                             #split the time normal departure rate into two section, one for 
                             #the normal departure rate and once the queue disappates the function
                             #should be the same as the arrival rate
-                            condlist.append((x >= df.iloc[row]['End'] and (x < t_queue_remove)))
+                            condlist.append((x >= df.iloc[row]['End'] and (x < t_queue_remove[0])))
                             funclist.append(depart)
                             # points.iloc[-1]['Start_x'] = df.iloc[row]['End']
                             # points.iloc[-1]['Stop_x'] = t_queue_remove[0]
                             points.loc[len(points.index)] = [df.iloc[row]['End'], t_queue_remove[0]]
                             
-                            condlist.append((x >= t_queue_remove) and (x < df.iloc[row +1]['Start']))
+                            condlist.append((x >= t_queue_remove[0]) and (x < df.iloc[row +1]['Start']))
                             funclist.append(arrivals)
                             # points.iloc[-1]['Start_x'] = t_queue_remove[0]
                             # points.iloc[-1]['Stop_x'] = df.iloc[row +1]['Start']
@@ -419,13 +419,13 @@ def piece(x, A_rate, D_rate, D_rate_dbl_park, df, Max_Q, len_scenario):
                             #split the time normal departure rate into two section, one for 
                             #the normal departure rate and once the queue disappates the function
                             #should be the same as the arrival rate
-                            condlist.append((x >= df.iloc[row]['End'] and (x < t_queue_remove)))
+                            condlist.append((x >= df.iloc[row]['End'] and (x < t_queue_remove[0])))
                             funclist.append(depart)
                             # points.iloc[-1]['Start_x'] = df.iloc[row]['End']
                             # points.iloc[-1]['Stop_x'] = t_queue_remove[0]
                             points.loc[len(points.index)] = [df.iloc[row]['End'], t_queue_remove[0]]
                             
-                            condlist.append((x >= t_queue_remove) and (x < df.iloc[row +1]['Start']))
+                            condlist.append((x >= t_queue_remove[0]) and (x < df.iloc[row +1]['Start']))
                             funclist.append(arrivals)
                             # points.iloc[-1]['Start_x'] = t_queue_remove[0]
                             # points.iloc[-1]['Stop_x'] = df.iloc[row +1]['Start']
@@ -509,13 +509,13 @@ def piece(x, A_rate, D_rate, D_rate_dbl_park, df, Max_Q, len_scenario):
                             #split the time normal departure rate into two section, one for 
                             #the normal departure rate and once the queue disappates the function
                             #should be the same as the arrival rate
-                            condlist.append((x >= df.iloc[row]['End'] and (x < t_queue_remove)))
+                            condlist.append((x >= df.iloc[row]['End']) and (x < t_queue_remove[0]))
                             funclist.append(depart)
                             # points.iloc[-1]['Start_x'] = df.iloc[row]['End']
                             # points.iloc[-1]['Stop_x'] = t_queue_remove[0]
                             points.loc[len(points.index)] = [df.iloc[row]['End'], t_queue_remove[0]]
                             
-                            condlist.append((x >= t_queue_remove) and (x < df.iloc[row +1]['Start']))
+                            condlist.append((x >= t_queue_remove[0]) and (x < df.iloc[row +1]['Start']))
                             funclist.append(arrivals)
                             # points.iloc[-1]['Start_x'] = t_queue_remove[0]
                             # points.iloc[-1]['Stop_x'] = df.iloc[row +1]['Start']
@@ -564,9 +564,9 @@ def piece(x, A_rate, D_rate, D_rate_dbl_park, df, Max_Q, len_scenario):
 
     
 #traffic input parameters
-A_rate_hr = 1833 #(veh/hr)
-D_rate_hr = 2136 #(veh/hr)
-D_rate_dbl_park_hr = 534 #departure rate when double parking is present
+A_rate_hr = 1104 #(veh/hr)
+D_rate_hr = 2582 #(veh/hr)
+D_rate_dbl_park_hr = 861 #departure rate when double parking is present
 
 A_rate = A_rate_hr / 60 #veh/min
 D_rate = D_rate_hr / 60 #veh/min
@@ -810,7 +810,7 @@ for c in [1,2,4,7]: #added
 
 # #save data needed for the graphic generation
 # import pickle
-# with open('pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_pessimistic.pkl', 'wb') as file:
+# with open('pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_17_Feb_2024_buffer_15_basecase.pkl', 'wb') as file:
 #     pickle.dump([net_dbl_park_minutes_df_inst_FCFS,
 #                   total_veh_delay_inst_FCFS,
 #                   queue_duration_inst_FCFS,

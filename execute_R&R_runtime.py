@@ -139,40 +139,40 @@ def save_res(res_df):
         print(e)
     return
 
-def load_res():
-    file = open('C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-16_Aaron Result (good data 3 spaces 4 demand)/Res_df.dat', 'rb')
+def load_res(path):
+    file = open(path, 'rb')
     res_df = pickle.load(file)
     file.close()
     return res_df
 
 def convert_for_sns(data):
     df_PAP = pd.concat([res_df['runtime_PAP'], res_df['status_PAP']], axis=1)
-    df_PAP['label'] = 'PAP only'
+    df_PAP['label'] = 'MILP only'
     df_PAP.rename(columns = {'runtime_PAP': 'runtime', 'status_PAP': 'status'}, inplace = True)
     
     df_AP = pd.concat([res_df['runtime_AP'], res_df['status_AP']], axis=1)
-    df_AP['label'] = 'AP only'
+    df_AP['label'] = 'ILP only'
     df_AP.rename(columns = {'runtime_AP': 'runtime', 'status_AP': 'status'}, inplace = True)
     
     df_both = pd.concat([res_df['runtime_hybrid_both'], res_df['status_hybrid_AP']], axis=1)
-    df_both['label'] = 'Hybrid\n(PAP and AP)'
+    df_both['label'] = 'Hybrid\n(MILP & ILP)'
     df_both.rename(columns = {'runtime_hybrid_both': 'runtime', 'status_hybrid_AP': 'status'}, inplace = True)
     
     df = pd.concat([df_PAP, df_AP, df_both], axis = 0)
-    df['status'] = df['status'].map({-1: 'Optimal (only needed PAP)', 2: 'Optimal', 9: 'Time Limit (Not Optimal)'})
+    df['status'] = df['status'].map({-1: 'Optimal (only needed MILP)', 2: 'Optimal', 9: 'Time Limit (Not Optimal)'})
     
     return df
 
 def gen_boxplot(data):
-    plt.figure()
+    plt.figure(figsize=(10,4))
     sns.boxplot(data = data, x = 'runtime', y = 'label', color = 'white', showfliers = False) #, hue = 'status', outliers removed with showfliers
-    sns.stripplot(data = data, x = 'runtime', y = 'label', hue = 'status', hue_order=['Optimal', 'Optimal (only needed PAP)', 'Time Limit (Not Optimal)'],
+    sns.stripplot(data = data, x = 'runtime', y = 'label', hue = 'status', hue_order=['Optimal', 'Optimal (only needed MILP)'],
                   edgecolor='black', jitter = .20, linewidth = 0.75)    #, 'Time Limit (Not Optimal)'
     plt.xlabel('Optimization Runtime (seconds)')
     plt.ylabel('Optimization Method')
     #plt.suptitle('Runtime Comparison')
-    plt.title('3 spaces, 4 vehices/hr/space (132 vehicles), $\Psi = 5$, $\Phi = 5$')
-    plt.legend(title = 'Algorithm Result', loc = 'lower right', fontsize = '9')
+    #plt.title('3 spaces, 4 vehices/hr/space (132 vehicles), $\Psi = 5$, $\Phi = 5$')
+    plt.legend(title = 'Algorithm Result', loc = 'lower right', fontsize = '12')
     
     return
 
@@ -183,34 +183,37 @@ if __name__ == '__main__':
     
     plt.rcParams['figure.dpi'] = 500
     
-    dataset = 'Aspen'
+    # dataset = 'Aspen'
     
-    start = 0
-    end = 660  #also know as T, for the Aspen data this needs to be 11hrs or 660 minutes, 7am-6pm
-                #for the Pitt data this should be set at 1200, represents 4am - Midnight
+    # start = 0
+    # end = 660  #also know as T, for the Aspen data this needs to be 11hrs or 660 minutes, 7am-6pm
+    #             #for the Pitt data this should be set at 1200, represents 4am - Midnight
     
-    iterations = 50
-    
-    
-    #baseline case
-    c = 3 #num parking spaces
-    phi = 5 #flexibility
-    demand = c*4*11 #total vehicles to draw veh/hr/parking space
-    buffer = 5 #buffer space between reservations
+    # iterations = 50
     
     
-    #run the optimization models
-    tic = time.time()
-    res_df = run_optimization(iterations, c, demand, start, end, phi, buffer, dataset)
-    toc = time.time()
-    runtime = toc-tic
-    print('optimization runtime: ' + str(runtime))
+    # #baseline case
+    # c = 3 #num parking spaces
+    # phi = 5 #flexibility
+    # demand = c*4*11 #total vehicles to draw veh/hr/parking space
+    # buffer = 5 #buffer space between reservations
     
-    #save the model results
-    save_res(res_df)
+    
+    # #run the optimization models
+    # tic = time.time()
+    # res_df = run_optimization(iterations, c, demand, start, end, phi, buffer, dataset)
+    # toc = time.time()
+    # runtime = toc-tic
+    # print('optimization runtime: ' + str(runtime))
+    
+    # #save the model results
+    # save_res(res_df)
     
     #load the results if needed
-    #res_df = load_res()
+    #path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-16_Aaron Result (good data 3 spaces 4 demand)/Res_df.dat'
+    path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-01_Aaron Result (good data 3 spaces 2 demand)/Res_df.dat'
+    #path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-01_Aaron Result (good data 3 spaces 3 demand)/Res_df.dat'
+    res_df = load_res(path)
     
     #start generating graphics!
     data_df = convert_for_sns(res_df)

@@ -629,7 +629,7 @@ plt.rcParams['figure.dpi'] = 500
 
 #***********Aspen w/ buffer 5**************************************************
 #new, random uniform number of DVs, 100 iteration, run for record, buffer 5
-with open('pub_Aspen_run_for_record_12_Nov_2022_buffer_5_reversed_scaling.pkl', 'rb') as file:
+with open('pub_Aspen_run_for_record_17_Jan_2024_buffer_15.pkl', 'rb') as file:
     n_index_lst_df, \
     n_index_norm_lst_df, \
     arrival_dfs_df, \
@@ -659,7 +659,7 @@ with open('pub_Aspen_run_for_record_12_Nov_2022_buffer_5_reversed_scaling.pkl', 
 #pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_pessimistic.pkl
 #pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_optimistic.pkl
 
-with open('pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_basecase.pkl', 'rb') as file:
+with open('pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_17_Feb_2024_buffer_15_optimistic.pkl', 'rb') as file:
     net_dbl_park_minutes_df_inst_FCFS, \
     total_veh_delay_inst_FCFS, \
     queue_duration_inst_FCFS, \
@@ -680,7 +680,7 @@ with open('pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_bu
 
 #***********Pittsburgh w/ buffer 5**************************************************
 #new, random uniform number of DVs, 100 iteration, run for record, buffer 5
-with open('pub_Pitt_run_for_record_27_Nov_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Pitt_run_for_record_18_Jan_2024_buffer_15.pkl', 'rb') as file:
     n_index_lst_df, \
     n_index_norm_lst_df, \
     arrival_dfs_df, \
@@ -709,7 +709,7 @@ with open('pub_Pitt_run_for_record_27_Nov_2022_buffer_5.pkl', 'rb') as file:
 #pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_pessimistic.pkl
 #pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_optimistic.pkl
 
-with open('pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_basecase.pkl', 'rb') as file:
+with open('pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_17_Feb_2024_buffer_15_optimistic.pkl', 'rb') as file:
     net_dbl_park_minutes_df_inst_FCFS, \
     total_veh_delay_inst_FCFS, \
     queue_duration_inst_FCFS, \
@@ -743,13 +743,13 @@ c_list = [1,2,4,7]
 #c_list = [1]
 for c in c_list:
     #create a series to represent the specific number of parking spaces we are looking at
-    parking_space = pd.Series([c]*100, name = 'Parking Spaces')
+    parking_space = pd.Series([c]*50, name = 'Parking Spaces') #*100 for the original data set, *50 for the R2R
     #pull the normalized parking demand for a specific number of parking spaces
     parking_space_demand = pd.Series(n_index_norm_lst_df[c], name = 'norm parking demand')
     #pull the associated reduction in total vehicle delay
-    redux_time = pd.Series(total_veh_delay_Diff[c]/60*365, name = 'redux_time') #/11/c  #or convert to hours per year /60*365, have min per day, convert to hours per day * 365 days in a year
+    redux_time = pd.Series(total_veh_delay_Diff[c]/20/c, name = 'redux_time') #/11/c  #or convert to hours per year /60*365, have min per day, convert to hours per day * 365 days in a year
     #pull the associated reduction in total vehicle delay / by 240 for fuel consumption
-    redux_fuel = pd.Series(total_veh_delay_Diff[c]/240*365, name = 'redux_fuel') #/11/c/240 #or convert to gallons per year /240*365, have min per day, convert to gallons per day * 365 days
+    redux_fuel = pd.Series(total_veh_delay_Diff[c]/240/20/c, name = 'redux_fuel') #/11/c/240 #or convert to gallons per year /240*365, have min per day, convert to gallons per day * 365 days
     
     #combine this in column form
     df = pd.concat([parking_space, parking_space_demand, redux_time, redux_fuel], axis = 1)
@@ -777,15 +777,15 @@ sns.lineplot(x = 'norm parking demand', y = 'rolling avg fuel', data = data_df, 
 #plt.suptitle("Reduction in Vehicle Delay and Fuel Consumption (\u03A6 = 5, \u03A8 = 5)")
 #plt.title("(Aspen, base case traffic, 21-sample rolling average)")
 
-ax1.set_ylabel('Reduction in Total Vehicle Delay\n(hours per year)')
-ax2.set_ylabel('Reduction in Fuel Lost\n(gallons per year)')
+ax1.set_ylabel('Reduction in Total Vehicle Delay\n(minutes per hour per parking space)')
+ax2.set_ylabel('Reduction in Fuel Lost\n(gallons per hour per parking space)')
 ax1.set_xlabel("Number of Deliveries\n(per parking space per hour)")
 
 #plt.legend(title = 'Parking Spaces', loc = 'lower right', prop={'size': 8})
-plt.legend(title = 'Parking Spaces', loc = 'lower left', prop={'size': 8})
+plt.legend(title = 'Parking Spaces', prop={'size': 8}) #loc = 'upper left',
 ax1.axhline(y = 0, xmin = 0, xmax = 6, linewidth=2, color='k', linestyle = '--')
-ax1.set_ylim(-4000, 4000)
-ax2.set_ylim(-4000/4, 4000/4)
+#ax1.set_ylim(-15500, 18000)
+#ax2.set_ylim(-15500/4, 18000/4)
 
 plt.savefig("output.jpg", bbox_inches = 'tight')
 
@@ -806,7 +806,7 @@ plt.rcParams['figure.dpi'] = 500
 
 # optimal w/ buffer, randomly shifted arrivals, reassassed parking schedule, run
 # the below load instead
-with open('pub_Aspen_reassessed_combined_1_Dec_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Aspen_reassessed_combined_18_Jan_2024_buffer_15.pkl', 'rb') as file:
         n_index_lst_df, \
         n_index_norm_lst_df, \
         arrival_dfs_df, \
@@ -834,7 +834,7 @@ with open('pub_Aspen_reassessed_combined_1_Dec_2022_buffer_5.pkl', 'rb') as file
         change_legal_and_dbl \
             = pickle.load(file)
 
-with open('pub_Aspen_net_dbl_parking_1_Dec_2022_buffer_5.pkl', 'rb') as file:
+with open('pub_Aspen_net_dbl_parking_14_Feb_2024_buffer_15.pkl', 'rb') as file:
     net_dbl_park_events_df_inst_FCFS, \
     net_dbl_park_events_df_inst_phi5, \
     max_parking_spaces, \
@@ -887,11 +887,12 @@ file.close()
 # requires pub\_Aspen\_reassessed\_combined\_1\_Dec\_2022\_buffer\_5.pkl
 total_dbl_park_Diff_df = pd.DataFrame()
 
-for c in range(1,8):
+#for c in range(1,8):
+for c in [1,2,4,7]:
     
     dbl_park = []
     
-    for i in range(0,100):
+    for i in range(0,50): #100 for OG work, 50 for R2R
         FCFS = dbl_park_events_df_inst_FCFS_df.iloc[i][c]
         phi5 = dbl_park_events_df_inst_phi5_df.iloc[i][c]
         total_dbl_park_FCFS = FCFS['s_i'].sum()
@@ -906,8 +907,8 @@ for c in range(1,8):
 #Updated method of graphing that shows the number of dbl parked vehicles over time
 import matplotlib.pyplot as plt
 
-i = 95
-c = 7
+i = 25  #25 for Aspen buffer 15, 
+c = 1   #1 for Aspen buffer 15, 
 
 #start with FCFS
 FCFS = dbl_park_events_df_inst_FCFS_df.iloc[i][c]

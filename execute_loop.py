@@ -31,16 +31,16 @@ np.random.seed(335)
 
 tic = time.time()
 
-dataset = 'Pitt'
+dataset = 'Aspen'
 
 start = 0
-end = 1200  #also know as T, for the Aspen data this needs to be 11hrs or 660 minutes, 7am-6pm
+end = 660  #also know as T, for the Aspen data this needs to be 11hrs or 660 minutes, 7am-6pm
             #for the Pitt data this should be set at 1200, represents 4am - Midnight
 
 iterations = 50 #added
 max_parking_spaces = 7 #also known as c #added
 max_hr_demand_per_space = 6
-max_DVs = max_parking_spaces * max_hr_demand_per_space * 20 #needs to bee changed to 20 when using the Pitt dataset, 11 for Aspen
+max_DVs = max_parking_spaces * max_hr_demand_per_space * 11 #needs to bee changed to 20 when using the Pitt dataset, 11 for Aspen
 #also known as n, need to size to the largest possible number of trucks scenario, #added (to get back to original, change 40 to max_parking_spaces)
 
 #set up set of flexibility scenarios
@@ -154,12 +154,12 @@ for c_index in range(1, max_parking_spaces +1):
         
         #what is the lower and upper bound of the number of DVs, which is dependent on the number of parking spaces
         lower_DVs = 1 #this is the lowest possible number of DVs to experience over the day, could go higher, but engineering judgement
-        upper_DVs = max_hr_demand_per_space*20*c_index #we want 6 veh/hr*11hr scenario window*the number of parking spaces #added
+        upper_DVs = max_hr_demand_per_space*11*c_index #we want 6 veh/hr*11hr scenario window*the number of parking spaces #added
         
         #draw a random integer between the upper and lower number of DVs to expect
         n_index = np.random.randint(lower_DVs, upper_DVs +1) #+1 becuase it is exclusive of the upper value
         n_index_lst.append(n_index)
-        n_index_norm = n_index / 20 / c_index #variable available for storage
+        n_index_norm = n_index / 11 / c_index #variable available for storage
         n_index_norm_lst.append(n_index_norm)
         
         #generate a random set of vehicle arrival requests based on the number of
