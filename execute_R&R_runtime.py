@@ -45,9 +45,9 @@ def run_optimization(iterations, c, demand, start, end, phi, buffer, dataset):
         
         #create the vehicle request matrix
         if dataset == 'Aspen':
-            Q, sum_service = gen.gen_veh_arrivals(demand, end)
+            Q, sum_service = gen.gen_veh_arrivals(demand, end, buffer)
         elif dataset == 'Pitt':
-            Q, sum_service = gen_Pitt.gen_Pitt_arrivals(demand, end)
+            Q, sum_service = gen_Pitt.gen_Pitt_arrivals(demand, end, buffer)
             
         #run FCFS for fun
         dbl_park_seq, dbl_parked_events, legal_parked_events, park_events_FCFS = seq_curb.seq_curb(c, Q, end)
@@ -166,13 +166,17 @@ def convert_for_sns(data):
 def gen_boxplot(data):
     plt.figure(figsize=(10,4))
     sns.boxplot(data = data, x = 'runtime', y = 'label', color = 'white', showfliers = False) #, hue = 'status', outliers removed with showfliers
-    sns.stripplot(data = data, x = 'runtime', y = 'label', hue = 'status', hue_order=['Optimal', 'Optimal (only needed MILP)'],
+    sns.stripplot(data = data, x = 'runtime', y = 'label', hue = 'status', hue_order=['Optimal', 'Optimal (only needed MILP)', 'Time Limit (Not Optimal)'],
                   edgecolor='black', jitter = .20, linewidth = 0.75)    #, 'Time Limit (Not Optimal)'
     plt.xlabel('Optimization Runtime (seconds)')
     plt.ylabel('Optimization Method')
     #plt.suptitle('Runtime Comparison')
     #plt.title('3 spaces, 4 vehices/hr/space (132 vehicles), $\Psi = 5$, $\Phi = 5$')
     plt.legend(title = 'Algorithm Result', loc = 'lower right', fontsize = '12')
+    #plt.xticks([0, 2, 4, 6, 8, 10, 12])
+    #plt.xticks([0, 50, 100, 150, 200, 250, 300])
+    plt.xlim([-10, 310])
+    #plt.xlim([-.5, 14.5])
     
     return
 
@@ -195,7 +199,7 @@ if __name__ == '__main__':
     # #baseline case
     # c = 3 #num parking spaces
     # phi = 5 #flexibility
-    # demand = c*4*11 #total vehicles to draw veh/hr/parking space
+    # demand = c*2*11 #total vehicles to draw veh/hr/parking space
     # buffer = 5 #buffer space between reservations
     
     
@@ -210,8 +214,8 @@ if __name__ == '__main__':
     # save_res(res_df)
     
     #load the results if needed
-    #path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-16_Aaron Result (good data 3 spaces 4 demand)/Res_df.dat'
-    path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-01_Aaron Result (good data 3 spaces 2 demand)/Res_df.dat'
+    path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-16_Aaron Result (good data 3 spaces 4 demand)/Res_df.dat'
+    #path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-01_Aaron Result (good data 3 spaces 2 demand)/Res_df.dat'
     #path = 'C:/Users/Aaron/Documents/GitHub/Parking_Slot_Assignment_Problem-Public/runtime/2024-01-01_Aaron Result (good data 3 spaces 3 demand)/Res_df.dat'
     res_df = load_res(path)
     

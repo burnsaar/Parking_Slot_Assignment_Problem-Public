@@ -659,7 +659,7 @@ with open('pub_Aspen_run_for_record_17_Jan_2024_buffer_15.pkl', 'rb') as file:
 #pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_pessimistic.pkl
 #pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_optimistic.pkl
 
-with open('pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_17_Feb_2024_buffer_15_optimistic.pkl', 'rb') as file:
+with open('pub_Aspen_queuing_data_post_process_phi5_limit30_midpt_17_Feb_2024_buffer_15_basecase.pkl', 'rb') as file:
     net_dbl_park_minutes_df_inst_FCFS, \
     total_veh_delay_inst_FCFS, \
     queue_duration_inst_FCFS, \
@@ -709,7 +709,7 @@ with open('pub_Pitt_run_for_record_18_Jan_2024_buffer_15.pkl', 'rb') as file:
 #pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_pessimistic.pkl
 #pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_optimistic.pkl
 
-with open('pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_17_Feb_2024_buffer_15_optimistic.pkl', 'rb') as file:
+with open('pub_Pitt_queuing_data_post_process_phi5_limit30_midpt_24_Mar_2023_buffer_5_basecase.pkl', 'rb') as file:
     net_dbl_park_minutes_df_inst_FCFS, \
     total_veh_delay_inst_FCFS, \
     queue_duration_inst_FCFS, \
@@ -740,16 +740,16 @@ data_df = pd.DataFrame()
 c_list = [1, 2, 3, 4, 5, 6, 7]
 c_list = [1,2,4,7]
 #c_list = [1,4,7]
-#c_list = [1]
+c_list = [1]
 for c in c_list:
     #create a series to represent the specific number of parking spaces we are looking at
-    parking_space = pd.Series([c]*50, name = 'Parking Spaces') #*100 for the original data set, *50 for the R2R
+    parking_space = pd.Series([c]*100, name = 'Parking Spaces') #*100 for the original data set, *50 for the R2R
     #pull the normalized parking demand for a specific number of parking spaces
     parking_space_demand = pd.Series(n_index_norm_lst_df[c], name = 'norm parking demand')
     #pull the associated reduction in total vehicle delay
-    redux_time = pd.Series(total_veh_delay_Diff[c]/20/c, name = 'redux_time') #/11/c  #or convert to hours per year /60*365, have min per day, convert to hours per day * 365 days in a year
+    redux_time = pd.Series(total_veh_delay_Diff[c]/60*365, name = 'redux_time') #/11/c  #or convert to hours per year /60*365, have min per day, convert to hours per day * 365 days in a year
     #pull the associated reduction in total vehicle delay / by 240 for fuel consumption
-    redux_fuel = pd.Series(total_veh_delay_Diff[c]/240/20/c, name = 'redux_fuel') #/11/c/240 #or convert to gallons per year /240*365, have min per day, convert to gallons per day * 365 days
+    redux_fuel = pd.Series(total_veh_delay_Diff[c]/240*365, name = 'redux_fuel') #/11/c/240 #or convert to gallons per year /240*365, have min per day, convert to gallons per day * 365 days
     
     #combine this in column form
     df = pd.concat([parking_space, parking_space_demand, redux_time, redux_fuel], axis = 1)
